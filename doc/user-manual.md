@@ -161,8 +161,27 @@ In **Display elements**, two independent switches control the turn instrument:
 
 - **Turn indicator** adds a mechanical-style post above the heading/turn bar.
 - **Turn and slip page** enables a separate page. Swipe left from the horizon to
-   open it, and swipe right to return. This page shows the turn instrument and
-   damped slip ball, without the horizon, other tapes or correction-gain readout.
+   open it, and swipe right to return. This page shows the turn instrument,
+   damped slip ball and compass, without the horizon, altitude/speed tapes or
+   correction-gain readout.
+
+In portrait, the round compass sits above the turn-and-slip dial. In landscape,
+the dial is on the left and the compass is on the right. The layout adjusts
+automatically while leaving the menu accessible. Both round instruments use
+matching diameters, reduced only as needed to fit the available screen space.
+
+The compass shows magnetic heading, not relative turn or rotation speed. Read
+the curved card against the fixed centre line or use the numeric heading below.
+N/E/S/W mark cardinal directions; other card numbers are tens of degrees, so
+12 means 120 degrees. Larger nearby headings appear to the left of the centre
+line, like a mechanical compass.
+
+MAGNETIC indicates active magnetic correction. MAG / GYRO HOLD means propagation
+from an established magnetic reference. Without that reference, MAG UNAVAILABLE
+and dashes are shown; relative turn is never substituted. The magnetometer's
+quality checks can reject a nearby magnet as interference. This is not a separate
+heading sensor, true-heading calculation or independent backup, and the styling
+does not guarantee accuracy.
 
 Both choices are saved and default off. The menu remains accessible on either
 page. Swiping does not restart the sensors or change XCSoar transmission. Turn
@@ -182,9 +201,10 @@ Incorrect pitch/roll can still affect the projection: it is not an independent
 gyro instrument or a way around the attitude estimator's limitations.
 
 Missing rates, stale/held/invalid attitude and near-vertical pitch make the needle
-unavailable rather than falsely centred. The slip ball retains its own validity
-rules. Important unavailable, degraded, test and recording indications can still
-appear on the dedicated page.
+unavailable after the bounded display hold, rather than falsely centred. The slip ball retains its own validity
+rules. Important unavailable, held, test and recording indications can still
+appear on the dedicated page. The DEGRADED label is omitted beneath this dial;
+degraded status remains available in Diagnostics and on the main horizon.
 
 ### Status and Unavailable Data
 
@@ -192,18 +212,25 @@ appear on the dedicated page.
 | --- | --- |
 | Estimator settling / no attitude | Wait for initialization; investigate persistent sensor or mounting faults |
 | DEGRADED | The estimate is still being updated, but its correction or quality is limited |
-| ATTITUDE HELD with an age | Last-known attitude, not current attitude |
+| ATTITUDE HELD / DISPLAY HELD with an age | A retained display, not current measurements; brief dropouts have a five-second hold limit |
 | STALE DATA or other unavailable state | Do not interpret the display as a current attitude measurement |
 | TRIM | A nonzero pitch display trim is active |
 | GAIN with a value | A non-default correction gain is active; shown on the main horizon, not the dedicated turn-and-slip page |
 | REC / REC ERROR | Recording is active or has encountered a problem |
 | `---` on an optional tape | The selected source is missing, stale or rejected |
 
-During very low specific force, the app can retain the last usable attitude and
-show **ATTITUDE HELD** with increasing age. It does not know the current attitude
-from that held image. Held attitude is not sent to XCSoar; slip and turn information
-may be unavailable. Without a previous usable pose, the app shows no attitude
-rather than inventing a level horizon.
+When attitude becomes unusable, the app retains the previous usable sensor frame
+for up to five seconds before clearing unavailable indications. The dedicated
+turn/slip page also holds briefly when turn-rate calculation becomes unavailable.
+**ATTITUDE HELD** or **DISPLAY HELD** shows the original measurement's increasing
+age. Retained slip, compass and other indications are old data, not new readings.
+
+Usable data resumes immediately when it returns. Continuous faults do not restart
+the hold timer. Without an earlier usable frame, the app cannot invent one.
+Stopping, changing orientation/calibration or starting a new session clears the
+cache. Diagnostics and recordings still report actual sensor faults immediately;
+the transmitter never uses the display cache as fresh attitude. Independent
+pressure/GPS failures retain their existing freshness checks.
 
 Altitude and speed have independent validity checks. Their presence does not
 prove that the attitude is correct, and an attitude fault does not necessarily

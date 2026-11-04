@@ -50,19 +50,20 @@
     <section class="turn-section" aria-labelledby="turn-title">
       <div class="container turn-layout">
         <figure class="app-figure">
-          <a href="assets/turn_slip_indicatpr.jpeg" aria-label="View the full-size turn-and-slip screenshot"><img src="assets/turn_slip_indicatpr.jpeg" width="918" height="2048" alt="GlideHorizon turn-and-slip page with a right-deflected needle, an above-nine-degrees-per-second indication and a slip ball right of centre." loading="lazy" decoding="async"></a>
-          <figcaption>Turn &amp; slip <span>Dedicated instrument page</span></figcaption>
+          <a href="assets/turn_slip_indicatpr.jpeg" aria-label="View the full-size turn-and-slip and compass screenshot"><img src="assets/turn_slip_indicatpr.jpeg" width="918" height="2048" alt="GlideHorizon portrait page with a compass showing 078 degrees and MAG / GYRO HOLD above a turn-and-slip dial with a left-deflected needle, an above-nine-degrees-per-second indication and a slip ball right of centre." loading="lazy" decoding="async"></a>
+          <figcaption>Turn, slip &amp; compass <span>Portrait layout with compass above the turn-and-slip dial</span></figcaption>
         </figure>
         <div class="turn-copy">
           <p class="eyebrow">Turn &amp; slip</p>
           <h2 id="turn-title">Another view of the motion.</h2>
-          <p class="turn-intro">A dedicated turn-and-slip page pairs a gyro-derived turn-rate needle with a damped slip ball, leaving the horizon and tapes on their own page.</p>
+          <p class="turn-intro">A dedicated turn-and-slip page combines a gyro-derived turn-rate needle, a damped slip ball and a magnetic compass, leaving the horizon and tapes on their own page.</p>
           <dl class="turn-details">
             <div><dt>Turn rate</dt><dd>Marks at 3, 6 and 9 degrees per second in each direction. The needle indicates heading turn rate, not bank angle.</dd></div>
             <div><dt>Slip indication</dt><dd>A damped ball responds to lateral and vertical specific force in the calibrated mounting frame. It does not measure aerodynamic sideslip angle.</dd></div>
+            <div><dt>Magnetic compass</dt><dd>The compass sits above the dial in portrait and to its right in landscape. It shows magnetic heading, never relative turn as a substitute. <a href="setup.html#compass">Read the compass and status labels</a>.</dd></div>
             <div><dt>XCSoar stays connected</dt><dd>Changing between the horizon and turn-and-slip pages does not restart the sensors or change XCSoar transmission.</dd></div>
           </dl>
-          <p class="turn-caution">The turn-rate calculation shares the attitude estimate and its limitations. It is not an independent gyro instrument.</p>
+          <p class="turn-caution">The turn-rate calculation shares the attitude estimate and its limitations; the compass is not an independent backup. ATTITUDE HELD or DISPLAY HELD marks old measurements retained for up to five seconds, not live readings. <a href="setup.html#display-status">Understand held and degraded displays</a>.</p>
         </div>
       </div>
     </section>
