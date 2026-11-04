@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Privacy information for the GlideHorizon website, external services and the experimental Android app's recordings and connections.">
+  <title>Privacy | GlideHorizon</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="container header-inner">
+    <a class="wordmark" href="index.html" aria-label="GlideHorizon home">Glide<span>Horizon</span></a>
+    <nav aria-label="Main navigation"><a href="index.html">Overview</a><a href="setup.html">Setup &amp; help</a><a href="downloads.html">Downloads</a><a href="limitations.html">Limitations</a><a href="support.html">Support</a></nav>
+    <a class="donate-link" href="https://ko-fi.com/ulfbackudd" rel="noreferrer">Donate <span aria-hidden="true">&#8599;</span></a>
+  </div></header>
+  <main id="main">
+    <div class="page-heading"><div class="container"><p class="eyebrow">Website and app data</p><h1>Privacy</h1><p class="description">Updated 4 November 2026. This page describes this static website and the app behavior documented in the current user manual.</p></div></div>
+    <div class="container section"><div class="document">
+      <section><h2>This website</h2><p>The website's pages contain no analytics scripts, advertising, embedded donation widgets, account system or submission forms. The site code does not set cookies or use browser local storage. Images and stylesheets are served with the site rather than loaded from third-party font or image services.</p><p>Hosting services can still process request information such as your IP address and browser details to deliver and protect the website. This site's deployment is configured for GitHub Pages; see the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noreferrer">GitHub General Privacy Statement</a> for GitHub's handling of personal data. The absence of analytics in the site code is not a promise that the hosting provider keeps no logs.</p></section>
+      <section><h2>External links and donations</h2><p>Links to GitHub and Ko-fi take you to services with their own privacy practices. Ko-fi handles optional donations; this website has no payment form and does not receive payment-card details through its pages. Review the external service's privacy information and terms before submitting information or contributing.</p></section>
+      <section><h2>Android app permissions and connections</h2><p>The experimental app uses phone sensors to estimate attitude. Optional GPS displays need precise-location permission and device location enabled; Bluetooth on newer Android versions needs Nearby devices permission. Android 13 and later request notification permission for service notifications.</p><p>The manual states that the app does not request background-location permission. GPS requests may nevertheless continue while another app is visible if GPS displays are enabled. Disable both GPS ground speed and GPS altitude, or stop the service, to stop those requests.</p><p>The optional XCSoar feed sends bank and pitch only to the configured destination. Local mode uses the same phone; Wi-Fi mode sends to a trusted local network; Bluetooth uses a paired device. LAN UDP is not encrypted or authenticated. See <a href="setup.html#xcsoar">connection setup</a> before enabling transmission.</p></section>
+      <section><h2>Recordings and exported files</h2><p>Recording is explicitly started in Diagnostics. Captures contain sensor, attitude, calibration and diagnostic data, including mounting metadata and gain changes. The current manual says optional GPS/pressure tape values and flight level are not recorded.</p><p>Recordings remain app-private until explicitly exported through Android's document picker. After export, the chosen destination controls access to that copy. Review files before sharing them, particularly mounting descriptions and diagnostic metadata.</p><p>Delete private captures through Recordings. Uninstalling or clearing app storage erases private recordings, settings and calibration, but does not remove copies already exported elsewhere. Exporting a recording does not back up all app settings.</p></section>
+      <section><h2>Support and scope</h2><p>Use the support channel supplied with your build for app or app-data questions. Do not include personal notifications, private recordings or unrelated personal data in public feedback. See <a href="support.html">support guidance</a>.</p><p>App details here summarize the 4 November 2026 manual, not an independent audit of every build. Consult the privacy information and terms accompanying your installed release for build-specific behavior.</p></section>
+    </div></div>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><p>GlideHorizon <span>by Ulf Backudd</span></p><nav aria-label="Footer navigation"><a href="privacy.html" aria-current="page">Privacy</a><a href="terms.html">Terms &amp; notices</a><a href="support.html">Support</a><a href="https://ko-fi.com/ulfbackudd" rel="noreferrer">Ko-fi &#8599;</a></nav><small>Phone-sensor attitude estimates. Not a certified or flight-qualified instrument.</small></div></footer>
+</body>
+</html>

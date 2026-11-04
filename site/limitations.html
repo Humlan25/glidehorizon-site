@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Important limitations of GlideHorizon phone-sensor attitude estimates, experimental displays and the optional XCSoar feed.">
+  <title>Limitations | GlideHorizon</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="container header-inner">
+    <a class="wordmark" href="index.html" aria-label="GlideHorizon home">Glide<span>Horizon</span></a>
+    <nav aria-label="Main navigation"><a href="index.html">Overview</a><a href="setup.html">Setup &amp; help</a><a href="downloads.html">Downloads</a><a href="limitations.html" aria-current="page">Limitations</a><a href="support.html">Support</a></nav>
+    <a class="donate-link" href="https://ko-fi.com/ulfbackudd" rel="noreferrer">Donate <span aria-hidden="true">&#8599;</span></a>
+  </div></header>
+  <main id="main">
+    <div class="page-heading"><div class="container"><p class="eyebrow">Understand the limits</p><h1>Operational limitations</h1><p class="description">A plausible-looking horizon can be wrong. A healthy sensor status is not proof of accurate attitude.</p></div></div>
+    <div class="container section"><div class="document">
+      <section><h2>Not a flight-qualified instrument</h2><div class="notice"><p><strong>GlideHorizon is experimental software, not a certified or flight-qualified instrument.</strong> Do not use it as a primary or emergency attitude reference, or as a means of flying without external visual reference.</p></div><p>Perform installation, mounting, calibration and configuration on the ground. Do not let operating or adjusting the app distract from operating an aircraft.</p></section>
+      <section><h2>Acceleration, drift and mounting</h2><p>The app estimates attitude from a phone's gyroscope and accelerometer. Accelerometers cannot distinguish gravity from sustained vehicle acceleration. Forward acceleration may appear as pitch; turning can distort roll. Coordinated aircraft turns do not eliminate this limitation.</p><p>Reducing accelerometer correction trades acceleration-induced error against gyro drift. No correction-gain setting guarantees accurate aircraft attitude. Calibration establishes a mounting reference; it does not remove these limitations or qualify the app for flight use.</p><p>Check mounting, orientation, the known stationary reference and displayed response during controlled ground tests. A changed mounting may require new calibration. See <a href="setup.html#calibration">mounting and calibration</a>.</p></section>
+      <section><h2>Know what each display means</h2><ul><li><strong>Speed is GPS ground speed, not airspeed.</strong> Coloured speed references must not be used to decide stall, manoeuvring or overspeed safety.</li><li><strong>The grid is a visual reference plane.</strong> It is not terrain, synthetic vision or ground-clearance information.</li><li><strong>Altitude and flight level are experimental.</strong> Phone pressure/GPS indications do not replace approved aircraft altimetry. QNH does not adjust GPS altitude.</li><li><strong>Magnetic heading is not true heading or GPS track.</strong> Metal, magnets and electrical equipment can affect it. Relative turn may drift; relative zero is not north.</li><li><strong>The turn instrument is not independent.</strong> Turn-rate calculation shares the attitude estimate and its limitations. The slip ball indicates filtered specific force, not aerodynamic sideslip angle.</li></ul></section>
+      <section><h2>Stale values and connected displays</h2><p>Held attitude is an old estimate, not current motion. Stale or unavailable indications must not be interpreted as live measurements. Sensor health and a running notification do not establish attitude accuracy.</p><p>The XCSoar feed sends bank and pitch only. Only fresh usable calibrated attitude is sent, but degraded estimates may still be transmitted. A SENDING status is not confirmation of reception. XCSoar may retain old values when packets stop; do not assume an automatic fallback.</p><p>Another app on the same phone shares its display, power, hardware and operating system. It is not independent hardware redundancy. See <a href="setup.html#xcsoar">connection setup and checks</a>.</p></section>
+      <section><h2>Phone and network limitations</h2><p>Sensor availability, mounting vibration, interrupted background processing and battery restrictions can affect operation. Allowing unrestricted background operation can increase battery consumption and does not guarantee continuity.</p><p>Use another-device UDP transmission only on a trusted local network. LAN UDP is not encrypted or authenticated. Bluetooth uses paired devices with Bluetooth Classic SPP, not BLE.</p><p>For a problem report, follow the <a href="support.html">support guidance</a>. These notes describe the experimental application documented on 4 November 2026; consult the instructions supplied with your installed build.</p></section>
+    </div></div>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><p>GlideHorizon <span>by Ulf Backudd</span></p><nav aria-label="Footer navigation"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; notices</a><a href="support.html">Support</a><a href="https://ko-fi.com/ulfbackudd" rel="noreferrer">Ko-fi &#8599;</a></nav><small>Phone-sensor attitude estimates. Not a certified or flight-qualified instrument.</small></div></footer>
+</body>
+</html>
