@@ -107,6 +107,12 @@ test('publishes only after both verified files have uploaded', async t => {
   assert(url.endsWith('/releases/tag/v1.0.2'));
   assert.deepEqual(state.events, ['create-draft', 'upload:GlideHorizon.apk', 'upload:GlideHorizon.apk.sha256', 'publish']);
   assert.equal(state.release.draft, false);
+  assert.match(state.release.body, /free to use under a proprietary license, not open source/);
+  assert.match(state.release.body, /Experimental software, not a certified or flight-qualified instrument/);
+  assert(state.release.body.includes('https://humlan25.github.io/glidehorizon-site/terms.html'));
+  assert(state.release.body.includes('https://humlan25.github.io/glidehorizon-site/privacy.html'));
+  assert(state.release.body.includes('ubackudd@gmail.com'));
+  assert(!state.release.body.includes('Google Play'));
 });
 
 test('failed upload remains a draft and can be resumed', async t => {

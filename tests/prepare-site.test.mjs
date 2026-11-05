@@ -23,6 +23,7 @@ test('no-release state contains no APK download link', () => {
   const html = releaseDownloads(null, repository);
   assert.match(html, /No public download currently offered/);
   assert(!html.includes('href='));
+  assert.match(html, /free to use under a proprietary license, not open source/);
 });
 
 test('published state links versioned APK, checksum and release notes', () => {
@@ -33,6 +34,8 @@ test('published state links versioned APK, checksum and release notes', () => {
   assert(html.includes('v1.0.2'));
   assert(html.includes('8.7 MiB'));
   assert(!html.includes('No public download'));
+  assert.match(html, /free to use under a proprietary license, not open source/);
+  assert.match(html, /Experimental-use limitations still apply/);
 });
 
 test('refuses incomplete, draft, prerelease and malformed metadata', () => {
@@ -70,6 +73,18 @@ test('builds both states without modifying source or including APKs in Pages', t
     assert.equal(readFileSync(source, 'utf8'), before);
     assert(!existsSync(path.join(output, 'resources')));
     assert(!existsSync(path.join(output, 'GlideHorizon.apk')));
+    const terms = readFileSync(path.join(output, 'terms.html'), 'utf8');
+    const license = readFileSync(new URL('../LICENSE', import.meta.url), 'utf8');
+    const licenseSection = terms.match(/<section id="license"[^>]*>([\s\S]*?)<\/section>/);
+    assert(licenseSection, 'Terms must include the full approved license');
+    const normalize = text => text.replace(/\s+/g, ' ').trim();
+    assert.equal(normalize(licenseSection[1].replace(/<[^>]+>/g, '')), normalize(license));
+    for (const page of ['terms.html', 'privacy.html', 'support.html']) {
+      const html = readFileSync(path.join(output, page), 'utf8');
+      assert(html.includes('href="mailto:ubackudd@gmail.com"'), `${page}: missing contact`);
+      assert(!/evaluation builds|does not currently provide an app-support inbox/i.test(html));
+      assert(html.includes('https://ko-fi.com/ulfbackudd'), `${page}: missing optional Ko-fi link`);
+    }
     const downloads = readFileSync(path.join(output, 'downloads.html'), 'utf8');
     if (metadata) assert(!downloads.includes('No public download'));
     else assert(downloads.includes('No public download'));

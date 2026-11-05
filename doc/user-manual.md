@@ -670,8 +670,9 @@ force, not a validated aircraft load-factor instrument.
 
 For a useful problem report, include app version, phone model, Android version,
 reproduction steps, connection mode if relevant, and the exact visible status.
-Use the support channel published with your release. Remove unrelated personal
-notifications and private information from screenshots or exported data.
+For support and privacy inquiries, email [ubackudd@gmail.com](mailto:ubackudd@gmail.com).
+Remove unrelated personal notifications and private information from screenshots
+or exported data.
 
 ## Menu Reference
 
@@ -697,10 +698,11 @@ inside that dialog to return to live attitude.
 
 ## Licenses and Donations
 
-Read **About / licenses** and the terms supplied with your release. GlideHorizon
-is proprietary; free availability does not make its original source open source.
-Third-party components retain their own licenses. Experimental evaluation builds
-may have restricted distribution/use terms.
+GlideHorizon is free to use under the [proprietary license](../LICENSE), not open
+source. The complete license is also published on the
+[Terms page](https://humlan25.github.io/glidehorizon-site/terms.html#license).
+Read **About / licenses** and the terms supplied with your release. Third-party
+components retain their own licenses. Experimental-use limitations still apply.
 
 **Donate** opens [Ulf Backudd's Ko-fi page](https://ko-fi.com/ulfbackudd) in your
 browser. Contributions are optional and handled by Ko-fi, not by an in-app payment

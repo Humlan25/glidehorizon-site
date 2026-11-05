@@ -10,7 +10,7 @@ const end = '<!-- release-downloads:end -->';
 export function releaseDownloads(release, repository) {
   if (!/^[\w.-]+\/[\w.-]+$/.test(repository)) throw new Error('Invalid GitHub repository.');
   if (release === null) {
-    return '<p class="release-state">No public download currently offered</p><p>A download will appear here after the first complete public APK release is published. The app is proprietary; public builds are intended to be free to download.</p>';
+    return '<p class="release-state">No public download currently offered</p><p>A download will appear here after the first complete public APK release is published. GlideHorizon is free to use under a proprietary license, not open source.</p>';
   }
   if (!release || release.draft || release.prerelease || !/^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(release.tag_name)) {
     throw new Error('Expected a published stable version release.');
@@ -29,7 +29,7 @@ export function releaseDownloads(release, repository) {
     return asset;
   });
   return `<p class="eyebrow">Latest public release: ${tag}</p>
-        <p>GlideHorizon Android ${tag} is available as a direct APK download (${(assets[0].size / 1024 / 1024).toFixed(1)} MiB). The application remains proprietary and experimental.</p>
+        <p>GlideHorizon Android ${tag} is available as a direct APK download (${(assets[0].size / 1024 / 1024).toFixed(1)} MiB). GlideHorizon is free to use under a proprietary license, not open source. Experimental-use limitations still apply.</p>
         <div class="actions"><a class="button" href="${assets[0].browser_download_url}" rel="noreferrer">Download APK</a><a class="text-link" href="${assets[1].browser_download_url}" rel="noreferrer">Download SHA-256 checksum</a></div>
         <p><a href="${notes}" rel="noreferrer">Release notes and all assets for ${tag}</a>. These files are hosted on GitHub Releases.</p>`;
 }

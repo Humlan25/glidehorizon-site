@@ -13,6 +13,12 @@ Static product and setup information for the experimental GlideHorizon Android a
 
 Keep shared navigation and footers consistent across all seven HTML pages. App claims should match the manual and the terms provided with the relevant build. Review privacy and release information when adding services, analytics or downloads.
 
+## License and contacts
+
+GlideHorizon is free to use under the [GlideHorizon Proprietary Public-Use License](LICENSE), not open source. The [Terms page](site/terms.html#license) reproduces the complete approved license; preserve its wording when updating the page. Experimental-use limitations remain in force and Ko-fi contributions are optional. License, support and privacy inquiries go to [ubackudd@gmail.com](mailto:ubackudd@gmail.com); no support or update commitment is made.
+
+The approved-license website update accompanies Android v1.0.5 (version code 1013). Its APK bundles the approved license in `assets/GlideHorizon-LICENSE.txt`. Publish it with a new `v1.0.5` tag; do not relabel or overwrite v1.0.2. For future updates, verify the APK's actual version and bundled license before following the release procedure below. Confirm that the deployed Downloads page links the new version and that the deployed [Terms](https://humlan25.github.io/glidehorizon-site/terms.html) and [Privacy](https://humlan25.github.io/glidehorizon-site/privacy.html) pages contain the approved license and contact updates. Do not claim Google Play availability.
+
 ## Publish with GitHub Pages
 
 1. In the GitHub repository, open **Settings > Pages** and select **GitHub Actions** as the build and deployment source. Repository permissions and a plan supporting Pages for the repository's visibility are required.

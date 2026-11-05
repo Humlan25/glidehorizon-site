@@ -1,0 +1,72 @@
+GlideHorizon Proprietary Public-Use License
+
+Copyright (c) 2026 Ulf Backudd. All rights reserved.
+
+1. Scope and Ownership
+
+These terms apply to original GlideHorizon software and project-owned materials
+for which Ulf Backudd holds the necessary rights. Ownership remains with the
+copyright holder. Third-party components and their notices remain subject to
+their own licenses, not these proprietary restrictions.
+
+2. Free License to Use
+
+Subject to these terms, you may download, install and run unmodified authorized
+GlideHorizon builds for lawful personal or organizational use without a license
+fee. This permission is non-exclusive. Downloading an authorized build through
+the publisher's official distribution channels does not require separate
+individual permission. You may keep backup copies for your own use.
+
+No source-code license, ownership transfer, right to sell the software or right
+to represent yourself as its publisher is granted. Voluntary contributions do
+not expand this license or provide safety assurances, support or updates.
+
+3. Reserved Rights
+
+Except where applicable law or a third-party license permits otherwise, you may
+not redistribute, sublicense, sell, rent, modify or create derivative works of
+the original GlideHorizon software without separate written permission. Do not
+remove required ownership or third-party notices. Any additional commercial
+licensing arrangement must be agreed separately with the copyright holder.
+
+4. Experimental Software and Use Limitations
+
+GlideHorizon is experimental and is not a certified or flight-qualified instrument.
+It must not be relied upon for aircraft control, instrument flight or emergency
+flight, or used as a substitute for required aircraft instruments. A plausible
+attitude, heading, speed or altitude indication may be incorrect, delayed or held.
+Its reference grid does not represent terrain or ground clearance. GPS ground
+speed is not airspeed.
+
+You remain responsible for complying with applicable operating rules and avoiding
+distraction. Free public availability, a signed build or distribution through an
+app store does not establish fitness for a safety-critical purpose.
+
+5. Privacy and External Services
+
+Information about data handling is provided at
+https://humlan25.github.io/glidehorizon-site/privacy.html . External services such
+as GitHub and Ko-fi have their own terms and privacy practices. This license does
+not grant consent to unrelated data processing or waive statutory privacy rights.
+
+6. Warranty and Liability
+
+To the maximum extent permitted by applicable law, the software is provided
+"AS IS", without warranties of any kind, including merchantability, fitness
+for a particular purpose and non-infringement. To the same extent, the copyright
+holder is not liable for claims or damages arising from the software or its use.
+Nothing in these terms excludes liability or statutory rights that cannot
+lawfully be excluded. No availability, support or update commitment is made.
+
+7. Termination and Mandatory Rights
+
+Permission under these terms ends if you materially breach them, subject to
+applicable mandatory law. On termination, stop using and delete copies covered
+by this license. Third-party and statutory rights remain unaffected. Nothing in
+these terms overrides mandatory consumer rights or applicable mandatory app-store
+requirements.
+
+8. Contact
+
+Publisher: Ulf Backudd. License, support and privacy inquiries:
+ubackudd@gmail.com.
