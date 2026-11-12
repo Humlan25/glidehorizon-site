@@ -60,6 +60,8 @@ For a failed upload, rerun the failed workflow: existing drafts are resumed. For
 
 Manual release changes do not automatically trigger a new Pages deployment. Run the Pages workflow manually after editing which release is latest or removing a release. The tag belongs to this website/distribution repository; separately tag the matching private Android source for traceability.
 
+Pages upload and deployment use the same attempt-specific artifact name (`github-pages-${{ github.run_attempt }}`), so reruns do not select artifacts from earlier attempts. If an older run reports multiple artifacts named `github-pages`, start a new **Deploy website to GitHub Pages** run on `main` after pushing this workflow fix. Rerunning the old tagged workflow does not pick up the fix; do not move the release tag or republish the APK.
+
 ## Validation
 
 Run `node --test` with Node.js 22; no package installation is needed. Tests cover the supplied checksum, invalid inputs, draft/resume and immutable-release behavior, both download-page states, and local links in generated output. Release API calls are mocked; a real GitHub Actions run is still required to verify repository permissions and live publication.
