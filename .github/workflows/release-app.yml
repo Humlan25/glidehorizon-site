@@ -41,11 +41,3 @@ jobs:
               tag: process.env.RELEASE_TAG
             }, path.join(process.env.GITHUB_WORKSPACE, 'resources', 'app'));
             core.notice(`Published APK release: ${url}`);
-
-  deploy-website:
-    needs: release
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    uses: ./.github/workflows/deploy-pages.yml

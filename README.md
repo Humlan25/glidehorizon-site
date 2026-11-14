@@ -51,16 +51,18 @@ The workflow does not change repository settings or publish until committed and 
    git push origin v1.0.2
    ```
 
-5. Check **Actions > Publish APK release**. CI validates the APK/checksum, creates a draft release, uploads both files and publishes only after both uploads finish. It then calls the Pages deployment directly; it does not rely on another event being triggered by `GITHUB_TOKEN`.
+5. Check **Actions > Publish APK release**. CI validates the APK/checksum, creates a draft release, uploads both files and publishes only after both uploads finish. Successful completion automatically starts a separate **Deploy website to GitHub Pages** run through `workflow_run`. Check both runs. Failed releases do not trigger deployment. A `main` push that changes APK assets defers website deployment until this release completes, avoiding an earlier deployment with the previous release's links.
 6. Check the public [Downloads page](https://humlan25.github.io/glidehorizon-site/downloads.html). Its links identify the latest published stable version. GitHub decides the latest release using its version/date-based `legacy` policy, so do not mark older releases as latest manually unless intentional.
 
-The built-in `GITHUB_TOKEN` is sufficient: the release job requests `contents: write`, and the deployment requests Pages/OIDC permissions. No personal token or signing secret is required. Repository/organization policies must allow those permissions, and **Settings > Pages > GitHub Actions** must be configured. If the `github-pages` environment restricts allowed deployment refs, allow the `v*` release tags as well as `main` (or approve deployments as required).
+The built-in `GITHUB_TOKEN` is sufficient: the release job requests `contents: write`, and the deployment requests Pages/OIDC permissions. No personal token or signing secret is required. Repository/organization policies must allow those permissions, and **Settings > Pages > GitHub Actions** must be configured. The follow-up deployment uses `main`, so the `github-pages` environment must allow that branch (and any required deployment approvals still apply). The updated Pages workflow must be on the default branch for `workflow_run` to trigger.
 
 For a failed upload, rerun the failed workflow: existing drafts are resumed. For an already published release, reruns verify the two assets byte-for-byte and never overwrite them. A published release with missing/different assets requires a new version tag. Do not move or force-push released tags. If release publication succeeds but Pages fails, rerun the failed deployment or run **Deploy website to GitHub Pages** manually on `main`; the published APK remains available.
 
 Manual release changes do not automatically trigger a new Pages deployment. Run the Pages workflow manually after editing which release is latest or removing a release. The tag belongs to this website/distribution repository; separately tag the matching private Android source for traceability.
 
 Pages upload and deployment use the same attempt-specific artifact name (`github-pages-${{ github.run_attempt }}`), so reruns do not select artifacts from earlier attempts. If an older run reports multiple artifacts named `github-pages`, start a new **Deploy website to GitHub Pages** run on `main` after pushing this workflow fix. Rerunning the old tagged workflow does not pick up the fix; do not move the release tag or republish the APK.
+
+After Pages reports deployment success, CI checks that the live Downloads page matches the generated page, retrying stale content for up to approximately three minutes. A stale page is a deployment failure, not a successful publication. Documentation-only pushes still deploy automatically; if an APK update is committed without publishing a tag, the previous site remains live until a release or manual Pages run.
 
 ## Validation
 

@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  workflow_call:
+  workflow_run:
+    workflows: [Publish APK release]
+    types: [completed]
 
 permissions:
   contents: read
@@ -16,8 +18,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      deploy: ${{ steps.check.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Defer APK updates until release publication
+        id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          deploy=true
+          if [ "$EVENT_NAME" = push ]; then
+            before="$BEFORE_SHA"
+            if [ "$before" = 0000000000000000000000000000000000000000 ]; then
+              before=$(git hash-object -t tree /dev/null)
+            fi
+            changed=$(git diff --name-only "$before" "$GITHUB_SHA" -- resources/app/GlideHorizon.apk resources/app/GlideHorizon.apk.sha256)
+            if [ -n "$changed" ]; then
+              echo "APK assets changed; the successful release workflow will trigger Pages."
+              deploy=false
+            fi
+          fi
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
   deploy:
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    needs: check
+    if: needs.check.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
@@ -62,3 +96,29 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
+      - name: Verify live download page
+        uses: actions/github-script@v7
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          PUBLISHED_SITE: ${{ runner.temp }}/published-site
+        with:
+          script: |
+            const fs = require('node:fs');
+            const path = require('node:path');
+            const expected = fs.readFileSync(path.join(process.env.PUBLISHED_SITE, 'downloads.html'), 'utf8');
+            const url = new URL('downloads.html', process.env.PAGE_URL);
+            for (let attempt = 1; attempt <= 18; attempt++) {
+              url.searchParams.set('deployment', `${context.runId}-${process.env.GITHUB_RUN_ATTEMPT}-${attempt}`);
+              const response = await fetch(url, {
+                headers: { 'Cache-Control': 'no-cache' },
+                signal: AbortSignal.timeout(15000)
+              });
+              if (!response.ok) throw new Error(`Live Downloads page returned HTTP ${response.status}.`);
+              if ((await response.text()) === expected) {
+                core.notice(`Verified published Downloads page: ${url.origin}${url.pathname}`);
+                return;
+              }
+              core.info(`Live Downloads page is not the generated page yet (attempt ${attempt}/18).`);
+              if (attempt < 18) await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+            throw new Error('Pages reported success, but the live Downloads page still differs from this deployment.');
