@@ -1,6 +1,6 @@
 # GlideHorizon User Manual
 
-Updated: 4 November 2026.
+Updated: 5 November 2026.
 
 This manual describes the current experimental Android application. Some builds
 are labelled **GlideHorizon Bench**. Features and menu names may differ in older
@@ -16,7 +16,7 @@ versions; use the instructions for the version you have installed.
 6. [Display controls](#display-controls)
 7. [Altitude, QNH and flight level](#altitude-qnh-and-flight-level)
 8. [GPS speed and reference markings](#gps-speed-and-reference-markings)
-9. [Correction gain](#correction-gain)
+9. [Correction gain](#correction-gain) and [gyro low-pass](#gyro-low-pass-experimental)
 10. [Connecting to XCSoar](#connecting-to-xcsoar)
 11. [Background operation and notifications](#background-operation-and-notifications)
 12. [Recording and diagnostics](#recording-and-diagnostics)
@@ -176,9 +176,10 @@ N/E/S/W mark cardinal directions; other card numbers are tens of degrees, so
 12 means 120 degrees. Larger nearby headings appear to the left of the centre
 line, like a mechanical compass.
 
-MAGNETIC indicates active magnetic correction. MAG / GYRO HOLD means propagation
-from an established magnetic reference. Without that reference, MAG UNAVAILABLE
-and dashes are shown; relative turn is never substituted. The magnetometer's
+In **Diagnostics**, MAGNETIC indicates active magnetic correction and GYRO_HOLD
+means propagation from an established magnetic reference. The compass omits the
+changing mode label below its face. Without a reference, its card is empty and the
+numeric heading shows dashes; relative turn is never substituted. The magnetometer's
 quality checks can reject a nearby magnet as interference. This is not a separate
 heading sensor, true-heading calculation or independent backup, and the styling
 does not guarantee accuracy.
@@ -188,11 +189,28 @@ page. Swiping does not restart the sensors or change XCSoar transmission. Turn
 off Turn and slip page to return to a single-page display. Swipe navigation is
 disabled while a menu or settings panel is open.
 
-The middle tick is zero turn rate. Three marks on each side represent **3, 6 and
-9 degrees per second**. The centre and second marks on each side (6 degrees per
-second) are thicker than the others. Right deflection indicates a right turn and
-left deflection a left turn. The needle stops at the outer mark and shows `>9 deg/s` when the
-rate exceeds the scale. Its damping reduces rapid movements but adds response lag.
+The scale is in **degrees per minute**. The middle tick is zero turn rate; the
+three marks on each side represent **one-third, two-thirds and the selected
+maximum**. The centre and second marks are thicker than the others. Right
+deflection indicates a right turn and left deflection a left turn.
+
+Tap the maximum-scale number below either needle to open the **Turn scale** wheel.
+Choose **60 to 720 degrees/minute in steps of 30**. The default is **540**, equivalent
+to the previous 9 degrees/second range, with side ticks at 180, 360 and 540.
+Drag the wheel or use the arrow buttons; the reset button selects 540. **Apply**
+saves the scale for both indicators and future launches; **Cancel** discards the
+preview. The label identifies the outer tick value, not the current rate. The
+outer ticks remain at 45 degrees of needle deflection. Beyond them, the needle
+continues proportionally to a horizontal 90-degree stop at twice the selected
+value, in either direction. For example, with 540 selected, 810 degrees/minute
+gives 67.5 degrees of deflection and 1080 reaches the stop. This extension has
+no additional ticks; rates beyond the stop cannot be distinguished. Unavailable
+data is indicated separately. Needle damping reduces rapid movements but adds response lag.
+
+Both turn indicators use the same two-stage low-pass filter, with a 0.25-second
+time constant per stage. A sustained change reaches roughly 90% indication after
+one second, reducing rapid jitter without overshoot. This affects only the turn
+indication, not pitch/roll estimation, raw recordings or the XCSoar attitude feed.
 
 This indicates heading turn rate, not bank angle. It is calculated from calibrated
 gyro rates and the untrimmed attitude estimate, not by differentiating magnetic
@@ -216,6 +234,7 @@ degraded status remains available in Diagnostics and on the main horizon.
 | STALE DATA or other unavailable state | Do not interpret the display as a current attitude measurement |
 | TRIM | A nonzero pitch display trim is active |
 | GAIN with a value | A non-default correction gain is active; shown on the main horizon, not the dedicated turn-and-slip page |
+| GYRO LPF with a frequency | Experimental pre-Fusion gyro filtering is enabled; it adds lag and affects local and transmitted attitude |
 | REC / REC ERROR | Recording is active or has encountered a problem |
 | `---` on an optional tape | The selected source is missing, stale or rejected |
 
@@ -286,6 +305,20 @@ movements that are safe for the aircraft or bench fixture and its surroundings.
    **Capture left tilt**.
 4. Return to the original reference pose and select **Validate level**.
 5. Review the measured movements and return check before **Accept and save**.
+
+The app records gyro movement between the still captures, including any lifting,
+twisting or repositioning of supports. Keep the motion about one consistent
+fore-aft axis. The solver requires at least **95% of the measured rotation energy**
+to align with that axis; a cross-axis failure reports the measured fit and the
+right/left moving-sample counts. Passing the still captures does not guarantee
+that the movements between them will pass.
+
+For a flat, screen-up phone on a bench with its top edge pointing forward, a
+secure lengthwise pivot can help produce repeatable right/left rocking. Keep the
+pivot in place throughout and support the phone level for both reference captures.
+Inserting or transferring a loose support between sides can introduce extra axes
+of motion. Use a stable fixture, avoid accidental screen touches and cable pull,
+and never perform this setup work in flight.
 
 Cancelled or failed attempts preserve the previous saved calibration. After a
 successful save, allow the estimator to settle and check its response again.
@@ -455,6 +488,26 @@ Use controlled ground tests and recordings to compare settings. None of these
 values solves the ambiguity between gravity and sustained acceleration. There
 is no recommended flight setting or validated accuracy bound.
 
+### Gyro Low-Pass (Experimental)
+
+Open **Gyro low-pass** from the menu. It defaults to **Off**. Turning it on selects
+**10 Hz**; use the slider or arrow buttons to choose **5-30 Hz in 1 Hz steps**.
+The setting applies live and is saved for the next launch. Closing the panel
+does not cancel changes. **Applied** shows the service setting; **GYRO LPF** appears
+on both instrument views while enabled. Turn the switch off to restore bypass.
+
+This filters the gyro before attitude estimation, so it affects the horizon and
+attitude sent to XCSoar, not just needle movement. Lower cutoff means stronger
+high-frequency suppression and more lag. The accelerometer remains unfiltered;
+the resulting timing difference needs evaluation. It cannot repair vibration
+aliasing or sensor clipping. A cutoff at or above half the delivered sample rate
+makes attitude unavailable rather than silently disabling the filter.
+
+Use this only for controlled ground/replay experiments. No cutoff is validated
+for flight. Compare raw sensor recordings, attitude drift and response to actual
+rotation, not merely visual smoothness. Raw sensor and calibration data remain
+unfiltered; recordings include the cutoff and timestamped changes.
+
 ## Connecting to XCSoar
 
 GlideHorizon supplies an optional bank/pitch feed using the GDL90 ForeFlight AHRS
@@ -617,8 +670,8 @@ leave incomplete data.
 
 Recordings contain sensor and diagnostic information, estimated attitude,
 calibration/orientation metadata, display trim, magnetic-reference information
-and correction gain changes. Raw recorded pitch is untrimmed. Current recordings
-use schema 7; the decoder also accepts older schemas 1-6. Replay is not currently
+and correction gain/gyro low-pass changes. Raw recorded pitch is untrimmed. Current recordings
+use schema 8; the decoder also accepts older schemas 1-7 with the gyro filter Off. Replay is not currently
 implemented as a user feature.
 
 The optional GPS/pressure tape readings and flight-level values are not currently
@@ -650,10 +703,13 @@ force, not a validated aircraft load-factor instrument.
 | --- | --- |
 | Pitch changes during acceleration or roll changes in a turn | This can be a gravity/acceleration ambiguity, not a faulty sensor. Gain changes trade this error against drift; they do not make the estimate dependable in sustained manoeuvres. |
 | Horizon does not match a known stationary pose | Check orientation, physical mounting, accepted calibration, known ground pitch and nonzero display trim. Do not recalibrate against an unknown pose. |
+| Wing-tilt calibration reports cross-axis motion | Read the measured fit and moving-sample counts. Avoid twisting, lifting or repositioning supports between captures; use one fixed fore-aft pivot. Flat mounting alone is not a reason to reject wing-tilt calibration. |
+| Attitude becomes unavailable with gyro low-pass enabled | Inspect the exact reason in Diagnostics. The cutoff must be below half the delivered sample rate. Return the filter to Off for comparison during ground testing; do not hide sensor faults by changing filter settings. |
 | Heading stays relative | Check magnetometer availability, surrounding interference and whether attitude is usable. Relative turn is not north. |
+| Compass takes time to acquire a heading or rarely corrects magnetically | Check Heading reference, Magnetic field, Magnetic sample heading and Last magnetic correction in Diagnostics. Initial alignment needs fresh usable attitude and a horizontal turn reference, RUNNING estimator status, suitable sensor accuracy, 20-70 uT total field, at least 5 uT horizontal field and rotation at most 20 deg/s. Later corrections require two seconds of agreement; readings repeatedly crossing the field limit restart that check. Try a stationary position away from magnetic cases, holders, chargers and metal. Another compass displaying a value does not establish accuracy. |
 | Swiping does not open the turn-and-slip page | Enable **Turn and slip page** in Display elements, close any menu or settings panel, then swipe left across the horizon. **Turn indicator** alone enables only the overlay. |
 | Turn needle is unavailable | Check attitude freshness and gyro-rate availability. Held/invalid attitude or near-vertical pitch makes heading turn rate unavailable, even if the slip ball still has usable data. |
-| Turn needle reaches its outer mark | The scale ends at 9 degrees/second in each direction. A `>9 deg/s` indication means the rate exceeds that range; it is not a precise reading of the higher rate. |
+| Turn needle moves beyond its outer mark | The needle continues beyond the configured outer tick to a horizontal stop at twice that rate. The unmarked extension gives an over-range indication; rates beyond the stop cannot be distinguished. |
 | ATTITUDE HELD remains visible | It is old data retained during low-force/reacquisition conditions. Do not interpret it as current attitude. |
 | Altitude or flight level shows dashes | Check the selected source, barometer availability, fresh pressure, GPS permission/reception and data-quality status. FL always needs pressure. |
 | Flight level differs from the altitude tape | Expected when QNH differs from standard pressure, when units differ, or when the main tape uses GPS. FL is standard-pressure altitude in hundreds of feet. |
@@ -666,13 +722,12 @@ force, not a validated aircraft load-factor instrument.
 | No running notification | Check Android Settings > Apps > GlideHorizon > Notifications. Silent notifications may be lower in the shade; full-screen apps can hide the status bar. |
 | Processing stops in the background | Check battery/background restrictions and whether the service was stopped. Foreground operation does not guarantee continuous delivery on every phone. |
 | An APK update is rejected | Check signing compatibility and release instructions. Do not uninstall without considering the loss of private recordings, calibration and settings. |
-| A setting returns after reopening | Most changes are saved immediately. Use the relevant reset/clear control; closing a panel is not an undo operation. QNH is an exception with explicit Apply/Cancel. |
+| A setting returns after reopening | Most changes, including Correction gain and Gyro low-pass, are saved immediately; closing those panels is not an undo operation. QNH and Turn scale use explicit Apply/Cancel, and cancelling discards their previews. |
 
 For a useful problem report, include app version, phone model, Android version,
 reproduction steps, connection mode if relevant, and the exact visible status.
-For support and privacy inquiries, email [ubackudd@gmail.com](mailto:ubackudd@gmail.com).
-Remove unrelated personal notifications and private information from screenshots
-or exported data.
+Use the support channel published with your release. Remove unrelated personal
+notifications and private information from screenshots or exported data.
 
 ## Menu Reference
 
@@ -683,6 +738,7 @@ or exported data.
 | Angle number size | Resize bank/pitch scale labels |
 | Display elements | Configure altitude, flight level, GPS speed, reference speeds, units, grid and turn-indicator views |
 | Correction gain | Adjust saved live accelerometer correction strength |
+| Gyro low-pass | Enable experimental pre-Fusion gyro filtering and choose a 5-30 Hz cutoff |
 | XCSoar feed | Configure and enable the selected attitude connection |
 | Ground calibration | Establish the stationary mounting reference or measured wing axis |
 | Recordings | Export or delete saved captures |
@@ -698,11 +754,14 @@ inside that dialog to return to live attitude.
 
 ## Licenses and Donations
 
-GlideHorizon is free to use under the [proprietary license](../LICENSE), not open
-source. The complete license is also published on the
-[Terms page](https://humlan25.github.io/glidehorizon-site/terms.html#license).
-Read **About / licenses** and the terms supplied with your release. Third-party
-components retain their own licenses. Experimental-use limitations still apply.
+Read **About / licenses** and the terms supplied with your release. GlideHorizon
+also provides its [privacy policy](https://humlan25.github.io/glidehorizon-site/privacy.html)
+and support contact, [ubackudd@gmail.com](mailto:ubackudd@gmail.com), from that screen.
+
+GlideHorizon
+is proprietary; free availability does not make its original source open source.
+Third-party components retain their own licenses. Experimental evaluation builds
+may have restricted distribution/use terms.
 
 **Donate** opens [Ulf Backudd's Ko-fi page](https://ko-fi.com/ulfbackudd) in your
 browser. Contributions are optional and handled by Ko-fi, not by an in-app payment
